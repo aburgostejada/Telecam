@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +36,9 @@ public class Dashboard extends PhotoHandlerActivity
     private static String PreferredPeer = "preferredPeer";
     private int photoAngleRotation = 0;
     private ImageHelper imageHelper;
+    private static final int NUM_PAGES = 2;
+    private ScreenSlidePagerAdapter mPagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +48,45 @@ public class Dashboard extends PhotoHandlerActivity
         imageHelper = new ImageHelper(this);
 
 
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         final ActionBar actionBar = getActionBar();
         if (actionBar != null) {
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-            ActionBar.Tab controllerTab = actionBar.newTab().setText(getString(R.string.controller_tab));
-            controllerTab.setTabListener(new DashboardTabListener.TabListener<ControllerTab>(this, getString(R.string.controller_tab), ControllerTab.class));
-            controllerTab.setTag(ControllerTab.class.toString());
-            actionBar.addTab(controllerTab);
+           
+//            ActionBar.Tab controllerTab = actionBar.newTab();//.setText(getString(R.string.controller_tab));
+//            controllerTab.setTabListener(new DashboardTabListener.TabListener<ControllerTab>(this, getString(R.string.controller_tab), ControllerTab.class));
+//            controllerTab.setTag(ControllerTab.class.toString());
+//            actionBar.addTab(controllerTab);
+//
+//            ActionBar.Tab galleryTab = actionBar.newTab();//.setText(getString(R.string.gallery_Tab));
+//            galleryTab.setTabListener(new DashboardTabListener.TabListener<GalleryTab>(this, getString(R.string.gallery_Tab), GalleryTab.class));
+//            galleryTab.setTag(GalleryTab.class.toString());
+//            actionBar.addTab(galleryTab);
+//
+//            ViewPager pager = (ViewPager) findViewById(R.id.pager);
+//
         }
+
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(mPagerAdapter);
+        pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // When changing pages, reset the action bar actions since they are dependent
+                // on which page is currently active. An alternative approach is to have each
+                // fragment expose actions itself (rather than the activity exposing actions),
+                // but for simplicity, the activity provides the actions in this sample.
+                invalidateOptionsMenu();
+            }
+        });
+//
 
         TeleCam.clientHandler =  TeleCam.bluetoothHelper.getClientHandlerFor(TAG);
         TeleCam.serverHandler = TeleCam.bluetoothHelper.getServerHandler(TAG);
     }
+
+
 
     private void setUpSpinner(ArrayList<DeviceData> deviceDataList){
         ArrayAdapter<DeviceData> deviceArrayAdapter = new ArrayAdapter<DeviceData>(this, android.R.layout.simple_spinner_item, deviceDataList);
@@ -135,19 +168,19 @@ public class Dashboard extends PhotoHandlerActivity
     @Override
     public void onStart() {
         super.onStart();
-        TeleCam.bluetoothHelper.onStart();
-        if (TeleCam.pairedDevices != null) {
-                ArrayList<DeviceData> deviceDataList = new ArrayList<DeviceData>();
-                for (BluetoothDevice device : TeleCam.pairedDevices) {
-                    deviceDataList.add(new DeviceData(device.getName(), device.getAddress()));
-                }
-                setUpSpinner(deviceDataList);
-                setUpShooterButton();
-            } else {
-                ToastHelper.showLong(this, R.string.bluetoothNotAvailableOrNotSupported);
-        }
-        setUpRotateButtons();
-        setUpSavePhotoButton();
+//        TeleCam.bluetoothHelper.onStart();
+//        if (TeleCam.pairedDevices != null) {
+//                ArrayList<DeviceData> deviceDataList = new ArrayList<DeviceData>();
+//                for (BluetoothDevice device : TeleCam.pairedDevices) {
+//                    deviceDataList.add(new DeviceData(device.getName(), device.getAddress()));
+//                }
+//                setUpSpinner(deviceDataList);
+//                setUpShooterButton();
+//            } else {
+//                ToastHelper.showLong(this, R.string.bluetoothNotAvailableOrNotSupported);
+//        }
+//        setUpRotateButtons();
+//        setUpSavePhotoButton();
 
     }
 
@@ -205,10 +238,24 @@ public class Dashboard extends PhotoHandlerActivity
         findViewById(R.id.savePhoto).setEnabled(true);
     }
 
-
     @Override
     public void savePhoto(byte[] messageBytes) {
         imageHelper.saveToFile(messageBytes);
+    }
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public android.support.v4.app.Fragment getItem(int position) {
+            return ScreenSlidePageFragment.create(position);
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
     }
 
 }
