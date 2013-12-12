@@ -5,8 +5,14 @@
     android:showAsAction="ifRoom|withText" />
 <item
     android:icon="@drawable/settings"
-    android:id="@+id/settings"
+    android:id="@+id/bluetooth_settings"
     android:showAsAction="ifRoom|withText" />
+
+<item
+    android:icon="@drawable/settings"
+    android:id="@+id/settings"
+    android:title="@string/settings"
+    />
 </menu>
 
 

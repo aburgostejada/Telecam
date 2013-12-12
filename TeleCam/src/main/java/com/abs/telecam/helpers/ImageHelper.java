@@ -21,6 +21,7 @@ import java.io.IOException;
 public class ImageHelper{
 
     private final Activity activity;
+    public static String directory = "TeleCam";
 
     public ImageHelper(Activity activity){
         this.activity = activity;
@@ -49,13 +50,13 @@ public class ImageHelper{
     private void updateMediaServiceForFile(String path){
         MediaScannerConnection.scanFile(activity, new String[] { path }, null, new MediaScannerConnection.OnScanCompletedListener() {
             public void onScanCompleted(String path, Uri uri) {
-                ToastHelper.showLong(activity, R.string.imageSave);
+                ToastHelper.toastOnUiThread(activity, R.string.imageSave);
             }
         });
     }
 
     private File getFile(){
-        String path = Environment.getExternalStorageDirectory() + File.separator + "TeleCam"+ File.separator ;
+        String path = Environment.getExternalStorageDirectory() + File.separator + directory + File.separator ;
         String filename = "pic_"+ System.currentTimeMillis() +".jpg";
         File dir = new File(path);
         if(!dir.exists()){

@@ -36,5 +36,13 @@ public class ToastHelper {
         });
     }
 
+    public static void toastOnUiThread(final Activity activity, final int text) {
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                showLong(activity, activity.getString(text));
+            }
+        });
+    }
+
 
 }

@@ -1,9 +1,11 @@
 package com.abs.telecam.helpers.gui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.MenuItem;
 import com.abs.telecam.R;
 import com.abs.telecam.TeleCam;
+import com.abs.telecam.gui.Preferences;
 import com.abs.telecam.helpers.Bluetooth.BluetoothHelper;
 
 public class BlueToothActionsMenuHelper
@@ -21,8 +23,11 @@ public class BlueToothActionsMenuHelper
             case R.id.discoverable:
                 helper.ensureDiscoverable();
                 return true;
-            case R.id.settings:
+            case R.id.bluetooth_settings:
                 helper.openBlueToothSettings();
+                return true;
+            case R.id.settings:
+                activity.startActivity(new Intent(activity, Preferences.class));
                 return true;
         }
         return false;

@@ -9,6 +9,7 @@ import android.os.Handler;
 import com.abs.telecam.btxfr.ClientThread;
 import com.abs.telecam.btxfr.ProgressData;
 import com.abs.telecam.btxfr.ServerThread;
+import com.abs.telecam.gui.ControllerViewer;
 import com.abs.telecam.helpers.Bluetooth.BluetoothHelper;
 import com.abs.telecam.helpers.gui.ToastHelper;
 
@@ -24,10 +25,16 @@ public class TeleCam extends Application {
     public static ClientThread clientThread;
     public static ServerThread serverThread;
     public static ProgressData progressData = new ProgressData();
+    public static ControllerViewer[] controllerViewers = new ControllerViewer[2];
     public static byte[] currentPreview;
     public static File lastPhotoFile;
     public static final int IMAGE_QUALITY = 100;
     public static String peer;
+    public static final int second = 1000;
+    public static final String PHOTO_COUNTDOWN_INTERVAL = "PHOTO_COUNTDOWN_INTERVAL";
+    public static long[] vibratePattern = { 50, 300, 50, 300} ;
+    public static int vibrateRepeat = 3;
+
 
     @Override
     public void onCreate() {
