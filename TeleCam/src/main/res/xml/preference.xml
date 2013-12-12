@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent">
+    <PreferenceCategory
+        android:title="@string/controller_title">
+
+        <ListPreference
+            android:inputType="number"
+            android:key="PHOTO_COUNTDOWN_INTERVAL"
+            android:summary="@string/photo_timer_summary"
+            android:title="@string/photo_timer_title"
+            android:entries="@array/photo_countdown_interval_entries"
+            android:entryValues="@array/photo_countdown_interval_values"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

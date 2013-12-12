@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+    <header
+        android:fragment="com.abs.telecam.gui.PreferenceFrag"
+        android:icon="@drawable/remote_c"
+        android:title="@string/controller_title" >
+        <extra
+            android:name="resource"
+            android:value="preferences" />
+    </header>
+</preference-headers>
