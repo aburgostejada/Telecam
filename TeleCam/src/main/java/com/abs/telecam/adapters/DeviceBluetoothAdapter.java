@@ -30,7 +30,7 @@ public class DeviceBluetoothAdapter extends ArrayAdapter<BluetoothDevice> {
         if (item!= null) {
             TextView itemView = (TextView) view.findViewById(R.id.new_device_label);
             if (itemView != null) {
-                itemView.setText(item.getName() + " " + item.getAddress());
+                itemView.setText(item.getName());
             }
         }
 
@@ -38,4 +38,10 @@ public class DeviceBluetoothAdapter extends ArrayAdapter<BluetoothDevice> {
     }
 
 
+    public void addOnce(BluetoothDevice device) {
+        int position = getPosition(device);
+        if(position == -1){
+            add(device);
+        }
+    }
 }

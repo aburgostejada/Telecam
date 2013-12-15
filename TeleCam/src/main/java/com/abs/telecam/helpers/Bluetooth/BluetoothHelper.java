@@ -66,17 +66,18 @@ public class BluetoothHelper {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
             activity.startActivity(discoverableIntent);
+        }else{
+            dialogHelper.showAlert(R.string.device_is_discoverable_title,R.string.device_is_discoverable_message );
         }
     }
 
-    public void newDeviceDialog(){
+    public void startDiscovery(){
         BluetoothAdapter adapter = TeleCam.getAdapter(activity);
         if (adapter.isDiscovering()) {
             adapter.cancelDiscovery();
         }
         adapter.startDiscovery();
-        dialogHelper.setNewDeviceDialog();
-        TeleCam.showProgressDialog(activity);
+        TeleCam.showProgressDialog(activity, R.string.no_devices_available_title, R.string.no_devices_available_message);
     }
 
     public void openBlueToothSettings() {

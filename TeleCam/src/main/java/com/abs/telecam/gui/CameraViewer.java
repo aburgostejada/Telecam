@@ -1,6 +1,7 @@
 package com.abs.telecam.gui;
 import android.bluetooth.BluetoothAdapter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -27,7 +29,7 @@ public class CameraViewer extends PhotoHandlerActivity implements Camera.Picture
 
     SurfaceHolder surface_holder = null;
     SurfaceHolderCallBack sh_callback  = null;
-    Button lookForConnections;
+    Button visibleButton;
     BluetoothAdapter adapter;
     ImageHelper imageHelper;
 
@@ -43,18 +45,22 @@ public class CameraViewer extends PhotoHandlerActivity implements Camera.Picture
         RelativeLayout layout = new RelativeLayout(this);
         layout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        //todo add other button
-//
-//        lookForConnections = new Button(this);
-//        lookForConnections.getBackground().setAlpha(50);
-//        lookForConnections.setText("Connect");
-//        lookForConnections.setTextColor(Color.GREEN);
-//        RelativeLayout.LayoutParams lButtonParams = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT , ViewGroup.LayoutParams.WRAP_CONTENT );
-//
-//        lButtonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        lookForConnections.setLayoutParams(lButtonParams);
+        visibleButton = new Button(this);
+        visibleButton.getBackground().setAlpha(30);
+        visibleButton.setText("Visible");
+        visibleButton.setTextColor(Color.GREEN);
+        RelativeLayout.LayoutParams lButtonParams = new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT , ViewGroup.LayoutParams.WRAP_CONTENT );
+
+        lButtonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        visibleButton.setLayoutParams(lButtonParams);
         layout.addView(surface_view);
-//        layout.addView(lookForConnections);
+        layout.addView(visibleButton);
+        visibleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TeleCam.bluetoothHelper.ensureDiscoverable();
+            }
+        });
         addContentView(layout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         if (surface_holder == null) {
@@ -112,19 +118,6 @@ public class CameraViewer extends PhotoHandlerActivity implements Camera.Picture
         camera.startPreview();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.bluetooth_actions, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        BlueToothActionsMenuHelper helper = new BlueToothActionsMenuHelper(this);
-        return helper.getActionForItem(item);
-    }
-    
 }
 
 

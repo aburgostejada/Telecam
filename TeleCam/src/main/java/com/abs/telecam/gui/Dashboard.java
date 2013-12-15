@@ -1,4 +1,5 @@
 package com.abs.telecam.gui;
+import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,13 @@ public class Dashboard extends PhotoHandlerActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+
         TeleCam.bluetoothHelper = new BluetoothHelper(this);
         imageHelper = new ImageHelper(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

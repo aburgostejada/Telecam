@@ -34,6 +34,7 @@ class ControllerBindings{
     private final Activity activity;
     private int photoAngleRotation = 0;
     private View view;
+    private Spinner deviceSpinner;
 
     public ControllerBindings(Activity activity){
         this.activity = activity;
@@ -134,7 +135,7 @@ class ControllerBindings{
     }
 
     private void setUpSpinner(View view, ArrayList<DeviceData> deviceDataList){
-        Spinner deviceSpinner = (Spinner) view.findViewById(R.id.deviceSpinner);
+        deviceSpinner = (Spinner) view.findViewById(R.id.deviceSpinner);
         ArrayAdapter<DeviceData> deviceArrayAdapter = new ArrayAdapter<DeviceData>(activity, android.R.layout.simple_spinner_item, deviceDataList);
         deviceArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         deviceSpinner.setAdapter(deviceArrayAdapter);
@@ -171,6 +172,12 @@ class ControllerBindings{
         ImageView imageView = (ImageView) view.findViewById(R.id.pic_preview);
         photoAngleRotation+=(90*direction);
         imageView.setRotation(photoAngleRotation);
+    }
+
+    public void openDevicesList() {
+        if(deviceSpinner != null){
+            deviceSpinner.performClick();
+        }
     }
 }
 

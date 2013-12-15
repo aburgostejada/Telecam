@@ -5,25 +5,44 @@
     android:orientation="vertical"
     android:padding="5dp"
     tools:context=".Welcome" >
-     <TextView
+     <LinearLayout
+         android:layout_height="wrap_content"
          android:layout_width="match_parent"
+         android:orientation="horizontal">
+
+     <TextView
+         android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:gravity="center"
-         android:padding="10dp"
-         android:layout_marginTop="20sp"
-         android:textSize="22sp"
-         android:text="@string/camOrRemoteDialogMessage"
-         android:id="@+id/textView" />
-         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+         android:textSize="20sp"
+         android:text="@string/device_name"/>
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:textSize="25sp"
+         android:textColor="@android:color/holo_red_light"
+         android:id="@+id/deviceName"/>
+     </LinearLayout>
+     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:padding="30sp">
              <LinearLayout
                  android:layout_centerInParent="true"
+                 android:layout_centerHorizontal="true"
                  android:orientation="vertical"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content">
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textStyle="italic|bold"
+                 android:textSize="20sp"
+                 android:layout_marginBottom="25sp"
+                 android:text="@string/camOrRemoteDialogMessage"
+                 android:id="@+id/textView" />
              <Button
                  android:layout_width="250sp"
                  android:layout_height="wrap_content"

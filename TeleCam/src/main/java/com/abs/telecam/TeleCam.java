@@ -1,6 +1,7 @@
 package com.abs.telecam;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -14,9 +15,13 @@ import com.abs.telecam.btxfr.ProgressData;
 import com.abs.telecam.btxfr.ServerThread;
 import com.abs.telecam.gui.ControllerViewer;
 import com.abs.telecam.helpers.Bluetooth.BluetoothHelper;
+import com.abs.telecam.helpers.gui.Dialog;
+import com.abs.telecam.helpers.gui.DialogHelper;
 import com.abs.telecam.helpers.gui.ToastHelper;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Set;
 
 public class TeleCam extends Application {
@@ -39,6 +44,8 @@ public class TeleCam extends Application {
     public static int vibrateRepeat = 3;
     public static DeviceBluetoothAdapter newDevicesArrayAdapter;
     public static ProgressDialog loadingDialog;
+    public static AlertDialog newDeviceDialog;
+    public static Hashtable<Integer, AlertDialog> alerts = new Hashtable<Integer, AlertDialog>();
 
 
     @Override
@@ -60,9 +67,9 @@ public class TeleCam extends Application {
         }
     }
 
-    public static void showProgressDialog(Activity activity){
-        loadingDialog = ProgressDialog.show(activity, "", activity.getString(R.string.please_wait), true);
-        new CountDownTimer(20*second, second) {
+    public static void showProgressDialog(final Activity activity, final int errorTitle, final int errorMessage){
+        loadingDialog = ProgressDialog.show(activity,"", activity.getString(R.string.please_wait), true);
+        new CountDownTimer(45*second, second) {
             public void onTick(long millisUntilFinished) {}
             public void onFinish() {
                 dismissProgressDialog();
@@ -73,6 +80,14 @@ public class TeleCam extends Application {
     public static void dismissProgressDialog(){
         if(loadingDialog != null){
             loadingDialog.dismiss();
+            loadingDialog = null;
+        }
+    }
+
+    public static void dismissNewDeviceDialog(){
+        if(newDeviceDialog != null){
+            newDeviceDialog.dismiss();
+            newDeviceDialog = null;
         }
     }
 

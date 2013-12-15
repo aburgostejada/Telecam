@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import com.abs.telecam.R;
 import com.abs.telecam.TeleCam;
 import com.abs.telecam.gui.Preferences;
+import com.abs.telecam.gui.Welcome;
 import com.abs.telecam.helpers.Bluetooth.BluetoothHelper;
 
 public class BlueToothActionsMenuHelper
@@ -30,7 +31,12 @@ public class BlueToothActionsMenuHelper
                 activity.startActivity(new Intent(activity, Preferences.class));
                 return true;
             case R.id.new_device:
-                helper.newDeviceDialog();
+                helper.startDiscovery();
+                return true;
+            case android.R.id.home:
+                Intent homeIntent = new Intent(activity, Welcome.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.startActivity(homeIntent);
                 return true;
         }
         return false;

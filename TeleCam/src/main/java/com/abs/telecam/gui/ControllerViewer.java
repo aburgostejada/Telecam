@@ -23,7 +23,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import com.abs.telecam.R;
 import com.abs.telecam.TeleCam;
@@ -43,12 +41,6 @@ import com.abs.telecam.helpers.gui.DialogHelper;
 import com.abs.telecam.helpers.gui.ToastHelper;
 import com.abs.telecam.util.Images;
 import com.abs.telecam.util.Utils;
-
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.AbstractCollection;
-import java.util.ArrayList;
 
 
 public class ControllerViewer extends Fragment implements AdapterView.OnItemClickListener{
@@ -66,6 +58,7 @@ public class ControllerViewer extends Fragment implements AdapterView.OnItemClic
     private int mPageNumber;
     private ControllerBindings controllerBindings;
     private GalleryBindings galleryBindings;
+    private DialogHelper dialogHelper;
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -91,24 +84,38 @@ public class ControllerViewer extends Fragment implements AdapterView.OnItemClic
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                TeleCam.dismissProgressDialog();
+                dialogHelper.setNewDeviceDialog();
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                    TeleCam.newDevicesArrayAdapter.add(device);
+                if (device != null && device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    TeleCam.newDevicesArrayAdapter.addOnce(device);
                     TeleCam.newDevicesArrayAdapter.notifyDataSetChanged();
+                    if(TeleCam.newDevicesArrayAdapter.getCount() > 0){
+                        TeleCam.dismissProgressDialog();
+                    }else{
+                        dialogHelper.showAlert(R.string.no_devices_available_title, R.string.no_devices_available_message);
+                    }
                 }
                 // When discovery is finished, change the Activity title
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 if (TeleCam.newDevicesArrayAdapter.getCount() == 0) {
-                    TeleCam.dismissProgressDialog();
+                    TeleCam.dismissNewDeviceDialog();
+                    dialogHelper.showAlert(R.string.no_devices_available_title, R.string.no_devices_available_message);
                 }
+                TeleCam.dismissProgressDialog();
+            }
+            else if(BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)){
+                int prevBondState = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, -1);
+                int bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, -1);
+                if (prevBondState == BluetoothDevice.BOND_BONDING && bondState == BluetoothDevice.BOND_BONDED) {
+                    TeleCam.dismissProgressDialog();
+                    controllerBindings.updateDevicesListForCurrentView();
+                    controllerBindings.openDevicesList();
+                }
+                controllerBindings.updateDevicesListForCurrentView();
+                TeleCam.dismissProgressDialog();
             }
         }
     };
-
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,8 +123,11 @@ public class ControllerViewer extends Fragment implements AdapterView.OnItemClic
         mPageNumber = getArguments().getInt(ARG_PAGE);
         controllerBindings = new ControllerBindings(getActivity());
         galleryBindings = new GalleryBindings(getActivity());
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        dialogHelper = new DialogHelper(getActivity());
         TeleCam.newDevicesArrayAdapter = new DeviceBluetoothAdapter(getActivity(), android.R.layout.select_dialog_singlechoice);
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         getActivity().registerReceiver(mReceiver, filter);
     }
 
@@ -163,7 +173,7 @@ public class ControllerViewer extends Fragment implements AdapterView.OnItemClic
         if(isGallery()){
             galleryBindings.mImageFetcher.setPauseWork(false);
             galleryBindings.mImageFetcher.setExitTasksEarly(true);
-            galleryBindings. mImageFetcher.flushCache();
+            galleryBindings.mImageFetcher.flushCache();
         }
     }
 

@@ -8,6 +8,8 @@ import android.os.Message;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import com.abs.telecam.R;
 import com.abs.telecam.TeleCam;
 import com.abs.telecam.helpers.gui.DialogHelper;
@@ -58,7 +60,11 @@ public class Welcome extends Activity
                     return false;
                 }
             });
+        }else{
+            TextView deviceName = (TextView) findViewById(R.id.deviceName);
+            deviceName.setText(TeleCam.getAdapter(this).getName());
         }
+
 
     }
 
