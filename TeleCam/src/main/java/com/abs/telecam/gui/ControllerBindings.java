@@ -1,8 +1,11 @@
 package com.abs.telecam.gui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,6 +23,7 @@ import com.abs.telecam.DeviceData;
 import com.abs.telecam.R;
 import com.abs.telecam.TeleCam;
 import com.abs.telecam.helpers.Bluetooth.BluetoothHelper;
+import com.abs.telecam.helpers.gui.DialogHelper;
 import com.abs.telecam.helpers.gui.ToastHelper;
 
 import java.util.ArrayList;
@@ -28,24 +33,39 @@ class ControllerBindings{
 
     private final Activity activity;
     private int photoAngleRotation = 0;
+    private View view;
 
     public ControllerBindings(Activity activity){
         this.activity = activity;
     }
 
+
     public void setUpEventsForController(View view){
+        this.view = view;
         if (TeleCam.pairedDevices != null) {
-            ArrayList<DeviceData> deviceDataList = new ArrayList<DeviceData>();
-            for (BluetoothDevice device : TeleCam.pairedDevices) {
-                deviceDataList.add(new DeviceData(device.getName(), device.getAddress()));
-            }
-            setUpSpinner(view, deviceDataList);
+            setUpDevicesList(view);
             setUpShooterButton(view);
         } else {
             ToastHelper.showLong(this.activity, R.string.bluetoothNotAvailableOrNotSupported);
         }
         setUpRotateButtons(view);
         setUpSavePhotoButton(view);
+    }
+
+
+    public void updateDevicesListForCurrentView(){
+        if(view !=null){
+            TeleCam.updatePairedDevicesList();
+            setUpDevicesList(view);
+        }
+    }
+
+    private void setUpDevicesList(View view){
+        ArrayList<DeviceData> deviceDataList = new ArrayList<DeviceData>();
+        for (BluetoothDevice device : TeleCam.pairedDevices) {
+            deviceDataList.add(new DeviceData(device.getName(), device.getAddress()));
+        }
+        setUpSpinner(view, deviceDataList);
     }
 
     private void vibrate(){
@@ -132,7 +152,7 @@ class ControllerBindings{
         });
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(activity);
         int preferredPeer = settings.getInt(Dashboard.PreferredPeer, -1);
-        if(preferredPeer > -1){
+        if(preferredPeer > -1 && deviceDataList.size() >= preferredPeer + 1){
             deviceSpinner.setSelection(preferredPeer);
         }
     }

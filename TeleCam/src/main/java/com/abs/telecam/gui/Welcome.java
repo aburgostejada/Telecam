@@ -3,11 +3,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import com.abs.telecam.R;
 import com.abs.telecam.TeleCam;
+import com.abs.telecam.helpers.gui.DialogHelper;
 import com.abs.telecam.helpers.gui.ToastHelper;
 
 
@@ -20,6 +23,7 @@ public class Welcome extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome);
         getActionBar().setTitle(R.string.camOrRemoteDialogTitle);
+        DialogHelper dialogHelper = new DialogHelper(this);
 
 
         final Button isCamera = (Button) findViewById(R.id.setCamera);
@@ -41,7 +45,19 @@ public class Welcome extends Activity
         });
 
         if(TeleCam.getAdapter(this) == null){
-            startActivityForResult(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS), ENABLED_BLUETOOTH);
+            dialogHelper.setYesNoDialog(R.string.bluetooth_is_required_title, R.string.bluetooth_is_required_message, new Handler.Callback(){
+            @Override
+                public boolean handleMessage(Message msg) {
+                    startActivityForResult(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS), ENABLED_BLUETOOTH);
+                    return false;
+                }
+            }, new Handler.Callback() {
+                @Override
+                public boolean handleMessage(Message msg) {
+                    finish();
+                    return false;
+                }
+            });
         }
 
     }

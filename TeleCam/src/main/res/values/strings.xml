@@ -6,7 +6,7 @@
 
     <string name="gallery_Tab">Gallery</string>
     <string name="action_settings">Settings</string>
-    <string name="bluetooth_settings">BlueTooth Settings</string>
+    <string name="bluetooth_settings">Bluetooth Settings</string>
 
     <string name="not_connected">You are not connected to a device</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Bye</string>
@@ -34,7 +34,7 @@
     <string name="camOrRemoteDialogTitle">Device Mode Selector</string>
     <string name="camOrRemoteDialogMessage">Please select this device behavior</string>
     <string name="imagePreviewDescription">Image Preview</string>
-    <string name="peerSelectLabel">Connected to:</string>
+    <string name="peerSelectLabel">Camera:</string>
     <string name="sendingPhoto">Sending photo</string>
     <string name="takingPicture">Taking Photo</string>
     <string name="errorInTransmission">Photo was sent, but didn\'t go through correctly</string>
@@ -64,7 +64,12 @@
     <string name="edit_action_label">Edit Photo</string>
     <string name="delete_original_dialog_title">Delete Original</string>
     <string name="delete_original_dialog_message">Do you want do delete the original photo</string>
-    <string name="save_photo">Save Photo</string>
+    <string name="save_photo">Save</string>
+    <string name="bluetooth_is_required_title">Bluetooth is required</string>
+    <string name="bluetooth_is_required_message">Do you want to enable bluetooth in settings menu?.</string>
+    <string name="make_visible">Visible</string>
+    <string name="new_device">New Device</string>
+    <string name="please_wait">Loading. Please wait...</string>
 
 
 </resources>

@@ -23,15 +23,19 @@ import com.abs.telecam.gui.CameraViewer;
 import com.abs.telecam.gui.Dashboard;
 import com.abs.telecam.helpers.ImageHelper;
 import com.abs.telecam.helpers.ObjectSerializer;
+import com.abs.telecam.helpers.gui.DialogHelper;
 import com.abs.telecam.helpers.gui.ToastHelper;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Set;
 
 public class BluetoothHelper {
     public static final String SAVE_PHOTO = "save_photo";
     public static final String SHOOT = "shoot";
     public final PhotoHandlerActivity activity;
+    private final DialogHelper dialogHelper;
     private String currentMethod;
 
     private ProgressDialog progressDialog;
@@ -44,6 +48,8 @@ public class BluetoothHelper {
         this.activity = activity;
         this.imageHelper = new ImageHelper(activity);
         this.adapter = TeleCam.getAdapter(activity);
+        this.dialogHelper = new DialogHelper(activity);
+
     }
 
     public void initializeServer(){
@@ -61,6 +67,16 @@ public class BluetoothHelper {
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
             activity.startActivity(discoverableIntent);
         }
+    }
+
+    public void newDeviceDialog(){
+        BluetoothAdapter adapter = TeleCam.getAdapter(activity);
+        if (adapter.isDiscovering()) {
+            adapter.cancelDiscovery();
+        }
+        adapter.startDiscovery();
+        dialogHelper.setNewDeviceDialog();
+        TeleCam.showProgressDialog(activity);
     }
 
     public void openBlueToothSettings() {
@@ -207,7 +223,11 @@ public class BluetoothHelper {
     }
 
     public void onStart() {
-        initializeServer();
+        if(adapter != null){
+            initializeServer();
+        }else{
+            ToastHelper.showLong(activity,R.string.bluetooth_is_required_title);
+        }
     }
 
 
@@ -219,6 +239,28 @@ public class BluetoothHelper {
         if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
+        }
+    }
+
+    public void pairDevice(BluetoothDevice device){
+        Class class1 = null;
+        try {
+            class1 = Class.forName("android.bluetooth.BluetoothDevice");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Method createBondMethod = null;
+        if (class1 != null) {
+            try {
+                createBondMethod = class1.getMethod("createBond");
+                Boolean returnValue = (Boolean) createBondMethod.invoke(device);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
     }
 

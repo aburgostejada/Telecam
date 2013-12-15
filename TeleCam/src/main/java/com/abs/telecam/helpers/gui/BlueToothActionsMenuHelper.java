@@ -29,6 +29,9 @@ public class BlueToothActionsMenuHelper
             case R.id.settings:
                 activity.startActivity(new Intent(activity, Preferences.class));
                 return true;
+            case R.id.new_device:
+                helper.newDeviceDialog();
+                return true;
         }
         return false;
     }

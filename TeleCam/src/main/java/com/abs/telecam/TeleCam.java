@@ -2,10 +2,13 @@ package com.abs.telecam;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.os.CountDownTimer;
 import android.os.Handler;
 
+import com.abs.telecam.adapters.DeviceBluetoothAdapter;
 import com.abs.telecam.btxfr.ClientThread;
 import com.abs.telecam.btxfr.ProgressData;
 import com.abs.telecam.btxfr.ServerThread;
@@ -34,6 +37,8 @@ public class TeleCam extends Application {
     public static final String PHOTO_COUNTDOWN_INTERVAL = "PHOTO_COUNTDOWN_INTERVAL";
     public static long[] vibratePattern = { 50, 300, 50, 300} ;
     public static int vibrateRepeat = 3;
+    public static DeviceBluetoothAdapter newDevicesArrayAdapter;
+    public static ProgressDialog loadingDialog;
 
 
     @Override
@@ -44,10 +49,30 @@ public class TeleCam extends Application {
 
     public static void setBluetoothAdapter(){
         adapter = BluetoothAdapter.getDefaultAdapter();
+        updatePairedDevicesList();
+    }
+
+    public static void updatePairedDevicesList(){
         if (adapter != null) {
             if (adapter.isEnabled()) {
                 pairedDevices = adapter.getBondedDevices();
             }
+        }
+    }
+
+    public static void showProgressDialog(Activity activity){
+        loadingDialog = ProgressDialog.show(activity, "", activity.getString(R.string.please_wait), true);
+        new CountDownTimer(20*second, second) {
+            public void onTick(long millisUntilFinished) {}
+            public void onFinish() {
+                dismissProgressDialog();
+            }
+        }.start();
+    }
+
+    public static void dismissProgressDialog(){
+        if(loadingDialog != null){
+            loadingDialog.dismiss();
         }
     }
 
