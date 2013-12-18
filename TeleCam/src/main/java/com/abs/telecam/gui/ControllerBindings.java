@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Camera;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -14,8 +15,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,6 +55,28 @@ class ControllerBindings{
         }
         setUpRotateButtons(view);
         setUpSavePhotoButton(view);
+        setUpFlashMode(view);
+    }
+
+    private void setUpFlashMode(View view) {
+        RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.flash_mode);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(checkedId) {
+                    case R.id.flash_off:
+                        TeleCam.flash_mode = Camera.Parameters.FLASH_MODE_OFF;
+                        break;
+                    case R.id.flash_auto:
+                        TeleCam.flash_mode = Camera.Parameters.FLASH_MODE_AUTO;
+                        break;
+                    case R.id.flash_on:
+                        TeleCam.flash_mode = Camera.Parameters.FLASH_MODE_ON;
+                        break;
+                }
+            }
+        });
     }
 
 

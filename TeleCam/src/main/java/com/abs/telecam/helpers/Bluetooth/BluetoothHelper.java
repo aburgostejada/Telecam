@@ -135,11 +135,11 @@ public class BluetoothHelper {
                             new Thread(new Runnable() {
                                 public void run() {
                                     if(getCurrentMethod().equals(BluetoothHelper.SHOOT)){
-                                        sendMessageToLink(BlueMessage.newFrom(BluetoothHelper.SHOOT, null, TeleCam.currentPreview));
+                                        sendMessageToLink(BlueMessage.newFrom(BluetoothHelper.SHOOT, null, null, TeleCam.currentPreview));
                                         TeleCam.currentPreview = null;
                                     }else if(getCurrentMethod().equals(BluetoothHelper.SAVE_PHOTO)){
                                         if(TeleCam.lastPhotoFile != null){
-                                            sendMessageToLink(BlueMessage.newFrom(BluetoothHelper.SAVE_PHOTO, null, imageHelper.loadImageFromFile(TeleCam.lastPhotoFile)));
+                                            sendMessageToLink(BlueMessage.newFrom(BluetoothHelper.SAVE_PHOTO, null, null, imageHelper.loadImageFromFile(TeleCam.lastPhotoFile)));
                                             TeleCam.lastPhotoFile = null;
                                         }
                                     }
@@ -148,7 +148,7 @@ public class BluetoothHelper {
                         }else if(tag.equals(Dashboard.TAG)){
                             new Thread(new Runnable() {
                                 public void run() {
-                                    BlueMessage blueMessage = BlueMessage.newFrom(getCurrentMethod(), adapter.getAddress(), new byte[0]);
+                                    BlueMessage blueMessage = BlueMessage.newFrom(getCurrentMethod(), adapter.getAddress(), TeleCam.flash_mode, new byte[0]);
                                     try {
                                         sendMessageToLink(ObjectSerializer.objToByte(blueMessage));
                                     } catch (IOException e) {
@@ -284,7 +284,7 @@ public class BluetoothHelper {
                        if(tag.equals(CameraViewer.TAG) && blueMessage != null){
                            TeleCam.peer = blueMessage.source;
                            if(blueMessage.command.equals(BluetoothHelper.SHOOT)){
-                               activity.takePicture();
+                               activity.takePicture(blueMessage.flashMode);
                            }else if(blueMessage.command.equals(BluetoothHelper.SAVE_PHOTO)){
                                activity.sendFullResPhoto();
                            }

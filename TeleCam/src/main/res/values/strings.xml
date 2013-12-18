@@ -67,6 +67,10 @@
     <string name="no_devices_available_title">No devices found :(</string>
     <string name="device_is_discoverable_title">Device Bluetooth Visibility</string>
     <string name="device_is_discoverable_message">Your device is visible already.</string>
+    <string name="flash_off">Off</string>
+    <string name="flash_auto">auto</string>
+    <string name="flash_on">On</string>
+    <string name="flash_label">Flash</string>
 
 
 </resources>

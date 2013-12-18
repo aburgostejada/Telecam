@@ -1,4 +1,5 @@
 package com.abs.telecam.gui;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,8 +30,13 @@ public class PhotoDetail extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dialogHelper = new DialogHelper(this);
         setContentView(R.layout.photo_detail);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        dialogHelper = new DialogHelper(this);
         loadImage();
     }
 

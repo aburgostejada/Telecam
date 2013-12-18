@@ -75,7 +75,7 @@ public class Dashboard extends PhotoHandlerActivity
 
 
     @Override
-    public void takePicture() {
+    public void takePicture(String flashMode) {
         //TODO Remove
     }
 

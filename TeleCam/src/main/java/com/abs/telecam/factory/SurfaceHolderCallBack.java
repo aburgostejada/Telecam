@@ -1,6 +1,7 @@
 package com.abs.telecam.factory;
 
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -33,7 +34,12 @@ public class SurfaceHolderCallBack implements SurfaceHolder.Callback   {
         return availableResolutions.get(sel);
     }
 
-    public void takePicture(Camera.PictureCallback imageCallback) {
+    public void takePicture(Camera.PictureCallback imageCallback, String flashMode) {
+        if(flashMode.equals(Parameters.FLASH_MODE_AUTO) || flashMode.equals(Parameters.FLASH_MODE_OFF) || flashMode.equals(Parameters.FLASH_MODE_ON)){
+            Parameters params = camera.getParameters();
+            params.setFlashMode(flashMode);
+            camera.setParameters(params);
+        }
         camera.takePicture(null, null, imageCallback);
     }
 
@@ -41,7 +47,7 @@ public class SurfaceHolderCallBack implements SurfaceHolder.Callback   {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         camera = Camera.open();
-        Camera.Parameters params;
+        Parameters params;
         params = camera.getParameters();
         params.setFlashMode(Camera.Parameters.FOCUS_MODE_AUTO);
         params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);

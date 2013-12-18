@@ -4,9 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -15,13 +12,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.abs.telecam.R;
 import com.abs.telecam.TeleCam;
 import com.abs.telecam.absctract.PhotoHandlerActivity;
 import com.abs.telecam.factory.SurfaceHolderCallBack;
 import com.abs.telecam.helpers.Bluetooth.BluetoothHelper;
 import com.abs.telecam.helpers.ImageHelper;
-import com.abs.telecam.helpers.gui.BlueToothActionsMenuHelper;
 
 public class CameraViewer extends PhotoHandlerActivity implements Camera.PictureCallback {
     private SurfaceView surface_view;
@@ -96,8 +91,8 @@ public class CameraViewer extends PhotoHandlerActivity implements Camera.Picture
         //TODO Remove
     }
 
-    public void takePicture() {
-        sh_callback.takePicture(this);
+    public void takePicture(String flashMode) {
+        sh_callback.takePicture(this, flashMode);
     }
 
     public void sendFullResPhoto() {

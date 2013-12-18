@@ -46,6 +46,7 @@ public class TeleCam extends Application {
     public static ProgressDialog loadingDialog;
     public static AlertDialog newDeviceDialog;
     public static Hashtable<Integer, AlertDialog> alerts = new Hashtable<Integer, AlertDialog>();
+    public static String flash_mode;
 
 
     @Override
