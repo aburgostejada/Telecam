@@ -1,4 +1,6 @@
 .gradle
 /local.properties
 /.idea/workspace.xml
+/.idea/*
+telecam.iml
 .DS_Store
