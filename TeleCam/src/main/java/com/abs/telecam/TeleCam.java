@@ -6,6 +6,7 @@ import android.app.Application;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.hardware.Camera;
 import android.os.CountDownTimer;
 import android.os.Handler;
 
@@ -46,7 +47,8 @@ public class TeleCam extends Application {
     public static ProgressDialog loadingDialog;
     public static AlertDialog newDeviceDialog;
     public static Hashtable<Integer, AlertDialog> alerts = new Hashtable<Integer, AlertDialog>();
-    public static String flash_mode;
+    public static String flash_mode = Camera.Parameters.FLASH_MODE_AUTO;
+    public static int photoAngleRotation = 0;
 
 
     @Override

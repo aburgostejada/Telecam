@@ -36,12 +36,14 @@ class ControllerBindings{
 
 
     private final Activity activity;
-    private int photoAngleRotation = 0;
     private View view;
     private Spinner deviceSpinner;
+    private  Vibrator v;
+
 
     public ControllerBindings(Activity activity){
         this.activity = activity;
+        this.v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
 
@@ -96,7 +98,6 @@ class ControllerBindings{
     }
 
     private void vibrate(){
-        Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(TeleCam.vibratePattern, TeleCam.vibrateRepeat);
     }
 
@@ -121,7 +122,7 @@ class ControllerBindings{
     private void setUpTimerForShooterButton(final TextView timerLabel){
         new CountDownTimer(getPhotoCountdownInterval(), TeleCam.second) {
             public void onTick(long millisUntilFinished) {
-                timerLabel.setText("( "+millisUntilFinished / TeleCam.second +" )");
+                timerLabel.setText("( "+ (millisUntilFinished / (TeleCam.second - 100)) +" )");
             }
 
             public void onFinish() {
@@ -196,13 +197,19 @@ class ControllerBindings{
 
     private void rotatePhoto(View view, int direction){
         ImageView imageView = (ImageView) view.findViewById(R.id.pic_preview);
-        photoAngleRotation+=(90*direction);
-        imageView.setRotation(photoAngleRotation);
+        TeleCam.photoAngleRotation+=(90*direction);
+        imageView.setRotation(TeleCam.photoAngleRotation);
     }
 
     public void openDevicesList() {
         if(deviceSpinner != null){
             deviceSpinner.performClick();
+        }
+    }
+
+    public void stopVibration() {
+        if(v !=null){
+            v.cancel();
         }
     }
 }

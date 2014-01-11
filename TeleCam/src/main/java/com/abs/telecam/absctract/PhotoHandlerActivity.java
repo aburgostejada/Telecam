@@ -1,7 +1,6 @@
 package com.abs.telecam.absctract;
 
 
-import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 
 public abstract class PhotoHandlerActivity extends FragmentActivity {

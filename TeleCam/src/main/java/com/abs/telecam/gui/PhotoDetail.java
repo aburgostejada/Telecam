@@ -93,6 +93,9 @@ public class PhotoDetail extends Activity{
                  i.putExtra("return-data", true);
                  startActivityForResult(i, EDIT_PHOTO);
                 return true;
+            case android.R.id.home:
+                finish();
+                return true;
 
         }
         return false;

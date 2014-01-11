@@ -109,7 +109,8 @@ public class CameraViewer extends PhotoHandlerActivity implements Camera.Picture
         Bitmap bitmap = imageHelper.getImageFromData(data);
         TeleCam.currentPreview = imageHelper.compress(imageHelper.resizeImage(bitmap, 1080));
         sendPicturePreview();
-        imageHelper.saveToFile(bitmap);
+        TeleCam.lastPhotoFile = imageHelper.getFile();
+        imageHelper.saveToFile(TeleCam.lastPhotoFile, bitmap);
         camera.startPreview();
     }
 

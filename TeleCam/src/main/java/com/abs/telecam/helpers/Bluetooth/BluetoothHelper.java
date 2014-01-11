@@ -180,7 +180,11 @@ public class BluetoothHelper {
                     case MessageType.DATA_SENT_OK: {
                         resetProgressDialog();
                         if(tag.equals(Dashboard.TAG)){
-                            ToastHelper.showShort(activity, R.string.takePhotoRequestSentSuccessfully);
+                            if(getCurrentMethod().equals(BluetoothHelper.SHOOT)){
+                                ToastHelper.showShort(activity, R.string.takePhotoRequestSentSuccessfully);
+                            }else if(getCurrentMethod().equals(BluetoothHelper.SAVE_PHOTO)) {
+                                ToastHelper.showShort(activity, R.string.savePhotoRequestSentSuccessfully);
+                            }
                         }else if(tag.equals(CameraViewer.TAG)){
                             ToastHelper.showShort(activity, R.string.photoSentSuccessfully);
                         }

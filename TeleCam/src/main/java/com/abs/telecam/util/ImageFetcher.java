@@ -76,7 +76,6 @@ public class ImageFetcher extends ImageResizer {
     }
 
     private void init(Context context) {
-        checkConnection(context);
         mHttpCacheDir = ImageCache.getDiskCacheDir(context, HTTP_CACHE_DIR);
     }
 
@@ -163,19 +162,6 @@ public class ImageFetcher extends ImageResizer {
         }
     }
 
-    /**
-    * Simple network connection check.
-    *
-    * @param context
-    */
-    private void checkConnection(Context context) {
-        final ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo == null || !networkInfo.isConnectedOrConnecting()) {
-            Log.e(TAG, "checkConnection - no connection found");
-        }
-    }
 
     /**
      * The main process method, which will be called by the ImageWorker in the AsyncTask background

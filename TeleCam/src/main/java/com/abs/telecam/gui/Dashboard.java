@@ -1,6 +1,7 @@
 package com.abs.telecam.gui;
 import android.app.ActionBar;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -96,6 +97,10 @@ public class Dashboard extends PhotoHandlerActivity
     public void savePhoto(byte[] messageBytes) {
         imageHelper.saveToFile(messageBytes);
 
+//        if(TeleCam.photoAngleRotation != 0){ TODO fix memory issue
+//            imageHelper.saveToFile(imageHelper.rotateImage(TeleCam.photoAngleRotation, imageHelper.getImageFromData(messageBytes)));
+//        }else{
+//        }
         for(ControllerViewer viewer : TeleCam.controllerViewers){
             viewer.galleryRefresh();
         }

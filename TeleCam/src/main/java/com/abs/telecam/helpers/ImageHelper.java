@@ -3,6 +3,7 @@ package com.abs.telecam.helpers;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -55,7 +56,14 @@ public class ImageHelper{
         });
     }
 
-    private File getFile(){
+    public Bitmap rotateImage(int angle, Bitmap bitmapSrc) {
+        Matrix matrix = new Matrix();
+
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(bitmapSrc, 0, 0, bitmapSrc.getWidth(), bitmapSrc.getHeight(), matrix, true);
+    }
+
+    public File getFile(){
         String path = Environment.getExternalStorageDirectory() + File.separator + directory + File.separator ;
         String filename = "pic_"+ System.currentTimeMillis() +".jpg";
         File dir = new File(path);
@@ -65,9 +73,8 @@ public class ImageHelper{
         return new File(path+filename);
     }
 
-    public void saveToFile(Bitmap bitmap) {
-        File file = getFile();
-        TeleCam.lastPhotoFile = file;
+
+    public void saveToFile(File file, Bitmap bitmap){
         try {
             FileOutputStream fos = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, TeleCam.IMAGE_QUALITY, fos);
@@ -78,6 +85,11 @@ public class ImageHelper{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void saveToFile(Bitmap bitmap) {
+        File file = getFile();
+        saveToFile(file, bitmap);
     }
 
     public void saveToFile(byte[] imageBytes){

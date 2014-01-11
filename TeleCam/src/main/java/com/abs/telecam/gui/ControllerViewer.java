@@ -136,6 +136,9 @@ public class ControllerViewer extends Fragment implements AdapterView.OnItemClic
     public void onStop() {
         super.onStop();
         TeleCam.bluetoothHelper.onStop();
+        if(!isGallery()){
+            controllerBindings.stopVibration();
+        }
     }
 
     @Override
@@ -145,6 +148,7 @@ public class ControllerViewer extends Fragment implements AdapterView.OnItemClic
             galleryBindings.mImageFetcher.closeCache();
         }else {
             TeleCam.bluetoothHelper.onDestroy();
+            controllerBindings.stopVibration();
             getActivity().unregisterReceiver(mReceiver);
         }
     }
@@ -174,6 +178,8 @@ public class ControllerViewer extends Fragment implements AdapterView.OnItemClic
             galleryBindings.mImageFetcher.setPauseWork(false);
             galleryBindings.mImageFetcher.setExitTasksEarly(true);
             galleryBindings.mImageFetcher.flushCache();
+        }else{
+            controllerBindings.stopVibration();
         }
     }
 

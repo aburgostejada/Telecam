@@ -71,6 +71,7 @@
     <string name="flash_auto">auto</string>
     <string name="flash_on">On</string>
     <string name="flash_label">Flash</string>
+    <string name="savePhotoRequestSentSuccessfully">Save Photo Request Sent</string>
 
 
 </resources>

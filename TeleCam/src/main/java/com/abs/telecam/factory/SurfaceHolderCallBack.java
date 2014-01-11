@@ -35,7 +35,7 @@ public class SurfaceHolderCallBack implements SurfaceHolder.Callback   {
     }
 
     public void takePicture(Camera.PictureCallback imageCallback, String flashMode) {
-        if(flashMode.equals(Parameters.FLASH_MODE_AUTO) || flashMode.equals(Parameters.FLASH_MODE_OFF) || flashMode.equals(Parameters.FLASH_MODE_ON)){
+        if(flashMode != null && (flashMode.equals(Parameters.FLASH_MODE_AUTO) || flashMode.equals(Parameters.FLASH_MODE_OFF) || flashMode.equals(Parameters.FLASH_MODE_ON))){
             Parameters params = camera.getParameters();
             params.setFlashMode(flashMode);
             camera.setParameters(params);
